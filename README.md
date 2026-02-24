@@ -12,20 +12,6 @@ The system is designed with a **defense-in-depth strategy**, assuming that breac
 
 ---
 
-## 🏗 Architecture Overview
-
-![Architecture Diagram](architecture/diagram.png)
-
-### High-Level Flow
-
-User → WAF → API Gateway → Lambda → DynamoDB / S3  
-                                      ↓  
-                             GuardDuty / CloudTrail / Config  
-                                      ↓  
-                             EventBridge → SNS / Remediation Lambda
-
----
-
 ## 🛡 Security Architecture
 
 This project implements Zero-Trust principles:
@@ -98,7 +84,7 @@ zero-trust-serverless-api/
 │   └── requirements.txt
 │
 ├── policies/
-│   ├── lambda-iam-policy.json
+│   ├── -
 │   └── kms-key-policy.json
 │
 ├── docs/
