@@ -1,4 +1,4 @@
-![Architechture Diagram](assets/diagram.png)
+![Architechture Diagram](assets/serverlessWebApp.drawio.svg)
 
 # 🔐 Zero-Trust Serverless API on AWS  
 ### Secure, Encrypted & Self-Healing Cloud Architecture

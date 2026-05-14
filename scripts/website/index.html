@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Vault - Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="landing-page">
+    <header class="landing-header">
+        <div class="logo">
+            <h1>Secure File Vault</h1>
+        </div>
+        <nav class="landing-nav">
+            <a href="auth.html" class="btn secondary">Log In</a>
+            <a href="auth.html?mode=signup" class="btn primary">Sign Up</a>
+        </nav>
+    </header>
+
+    <main class="hero-section">
+        <div class="hero-content">
+            <h2>Your Files, Secured in the Cloud</h2>
+            <p>A zero-trust serverless platform designed for maximum API security and data protection. Store, access, and manage your critical documents with end-to-end peace of mind.</p>
+            <div class="hero-actions">
+                <a href="auth.html?mode=signup" class="btn primary hero-btn">Get Started</a>
+                <a href="auth.html" class="btn secondary hero-btn">Sign In to Vault</a>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <div class="feature-card">
+                <h3>Zero-Trust Architecture</h3>
+                <p>Every request is authenticated and authorized via Amazon Cognito and API Gateway.</p>
+            </div>
+            <div class="feature-card">
+                <h3>End-to-End Security</h3>
+                <p>Files are uploaded securely to S3 with strict IAM policies and WAF protections.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Serverless Scaling</h3>
+                <p>Built purely on AWS Serverless components like Lambda and DynamoDB for limitless scale.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Secure File Vault. All rights reserved.</p>
+    </footer>
+</body>
+</html>
