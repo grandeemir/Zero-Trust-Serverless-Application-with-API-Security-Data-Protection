@@ -1,190 +1,105 @@
-![Architechture Diagram](assets/serverlessWebApp.drawio.svg)
+![Architecture Diagram](assets/serverlessWebApp.drawio.svg)
 
-# 🔐 Zero-Trust Serverless API on AWS  
+# 🔐 Zero-Trust Serverless Web Application: Secure File Vault
 ### Secure, Encrypted & Self-Healing Cloud Architecture
 
 ## 📌 Project Overview
 
-This project demonstrates a **Zero-Trust serverless architecture** built on AWS.  
-It focuses on API security, identity-based access control, encryption, logging, threat detection, and automated remediation.
+This project demonstrates a **Zero-Trust serverless web application** built on AWS.  
+It implements a "Secure File Vault" where users can safely store, access, and manage critical documents.
+The architecture focuses heavily on API security, identity-based access control, frontend protection, data encryption, continuous logging, threat detection, and automated remediation.
 
-The system is designed with a **defense-in-depth strategy**, assuming that breaches are inevitable and implementing controls at every layer.
+By adopting a **defense-in-depth strategy**, this architecture assumes that breaches are inevitable and implements strict controls at every layer—from the user interface delivery to the backend data storage.
 
 ---
 
-## 🛡 Security Architecture
+## 🛡️ Security Architecture & Components
 
-This project implements Zero-Trust principles:
+This project implements Zero-Trust principles using a robust stack of AWS services:
 
-### 1️⃣ Network Layer
-- AWS WAF (L7 filtering)
-- Managed rule groups (SQLi, XSS protection)
-- Rate limiting
-- IP reputation filtering
+### 1️⃣ Edge & Network Layer
+- **Amazon CloudFront:** Secure content delivery network (CDN) for delivering the static web application frontend.
+- **Amazon S3 (Frontend):** Hosts the static web application assets (HTML, CSS, JS).
+- **AWS WAF (Web Application Firewall):** Protects CloudFront and API Gateway against Layer 7 attacks, including SQLi, XSS, and rate limiting.
 
 ### 2️⃣ Identity & Access Management
-- Amazon Cognito for JWT-based authentication
-- API Gateway Authorizer validation
-- IAM least-privilege roles
-- No wildcard permissions
+- **Amazon Cognito:** Manages user sign-up, sign-in, and provides JWT-based authentication.
+- **Amazon API Gateway:** Serves as the backend API entry point, validating Cognito JWTs via Authorizers.
 
 ### 3️⃣ Compute Security
-- AWS Lambda with restricted IAM role
-- Secrets retrieved dynamically from AWS Secrets Manager
-- No hardcoded credentials
-- Encrypted environment variables
+- **AWS Lambda:** Serverless backend compute executing with strictly scoped IAM roles.
+- **AWS Secrets Manager:** Securely stores and dynamically retrieves application secrets without hardcoding them in the source code.
 
 ### 4️⃣ Data Protection
-- DynamoDB encryption using AWS KMS
-- S3 bucket with KMS encryption
-- S3 Block Public Access enabled
-- Tokenization logic for sensitive fields
+- **Amazon DynamoDB:** Stores file metadata and application state, encrypted at rest using AWS KMS.
+- **Amazon S3 (Data Vault):** Securely stores uploaded files. Files are uploaded via presigned URLs and encrypted via KMS. Block Public Access is strictly enforced.
 
-### 5️⃣ Logging & Monitoring
-- AWS CloudTrail enabled
-- CloudWatch logs for Lambda & API Gateway
-- AWS GuardDuty for threat detection
-- AWS Config for compliance monitoring
+### 5️⃣ Logging, Monitoring & Threat Detection
+- **AWS CloudTrail:** Continuously records all API activity across the AWS account.
+- **Amazon GuardDuty:** Provides intelligent threat detection and continuous monitoring of AWS accounts and workloads.
+- **AWS Config:** Evaluates and monitors the compliance of AWS resources against security rules.
 
 ### 6️⃣ Automated Threat Response
-- GuardDuty findings sent to EventBridge
-- EventBridge triggers:
-  - SNS notification
-  - Automated remediation Lambda
-
-Example remediation actions:
-- Reverting public S3 bucket configuration
-- Disabling compromised IAM user
-- Applying restrictive bucket policy
-
----
-
-## 🎯 Zero-Trust Design Principles Applied
-
-- Never trust network traffic
-- Never trust identity without verification
-- Enforce least privilege
-- Encrypt data at rest and in transit
-- Continuously monitor for anomalies
-- Automatically respond to threats
+- **Amazon EventBridge:** Routes security findings from GuardDuty and non-compliance events from AWS Config.
+- **Amazon SNS:** Sends alerts and notifications regarding security events.
+- **Automated Remediation (Lambda):** EventBridge triggers specialized Lambda functions to automatically revert unsafe configurations (e.g., misconfigured S3 bucket policies) or isolate compromised identities.
 
 ---
 
 ## 📂 Repository Structure
 
 ```
-zero-trust-serverless-api/
+zero-trust-serverless-application/
 │
-├── architecture/
-│   ├── diagram.png
-│   └── threat-model.md
+├── README.md
+├── assets/
+│   └── serverlessWebApp.drawio.svg         # Architecture Diagram
 │
-├── lambda/
-│   ├── app.py
-│   └── requirements.txt
+├── environments/
+│   ├── DEV/                                # Development Environment Terraform Variables
+│   └── PROD/                               # Production Environment Terraform Variables
 │
-├── policies/
-│   ├── -
-│   └── kms-key-policy.json
+├── modules/                                # Terraform Infrastructure Modules
+│   ├── api_gw/                             # API Gateway
+│   ├── cognito/                            # User Authentication
+│   ├── dynamoDB/                           # Metadata Storage
+│   ├── lambda/                             # Backend Compute
+│   ├── s3/                                 # Secure File Vault Storage
+│   ├── S3&CDN/                             # Frontend Hosting (S3 + CloudFront)
+│   ├── secret_manager/                     # Secrets Management
+│   ├── security_layer/
+│   │   ├── cloudtrail/                     # Audit Logging
+│   │   ├── config/                         # Compliance Monitoring
+│   │   ├── eventbridge/                    # Event Routing
+│   │   ├── guardDuty/                      # Threat Detection
+│   │   └── waf/                            # Web Application Firewall
+│   └── sns/                                # Notifications
 │
-├── docs/
-│   ├── deployment-steps.md
-│   └── security-controls.md
-│
-└── terraform/   (Infrastructure as Code - planned phase)
+└── scripts/
+    ├── todo_app.py
+    └── webapp/                             # Vanilla JS Static Frontend App
+        ├── index.html                      # Landing Page
+        ├── auth.html                       # Login & Sign Up Page
+        ├── vault.html                      # Main Secure Vault Interface
+        ├── error.html                      # Error Page
+        ├── styles.css                      # Application Styling
+        ├── app.js / auth.js / vault.js     # Frontend Logic & Cognito Integration
+        └── config.js                       # AWS Resource Configuration
 ```
 
 ---
 
-## 🚀 Deployment Steps (Console-Based Version)
+## 🎯 Zero-Trust Design Principles Applied
 
-1. Create Cognito User Pool
-2. Configure API Gateway with Cognito Authorizer
-3. Deploy Lambda function
-4. Attach least-privilege IAM role
-5. Enable DynamoDB & S3 encryption with KMS
-6. Enable GuardDuty, CloudTrail, AWS Config
-7. Create EventBridge rule for security findings
-8. Configure SNS and remediation Lambda
-
----
-
-## 🔎 Threat Model
-
-| Threat | Mitigation |
-|--------|------------|
-| SQL Injection | AWS WAF Managed Rules |
-| Cross-Site Scripting (XSS) | WAF filtering |
-| Stolen JWT | Expiration + Signature validation |
-| IAM privilege escalation | Least privilege + CloudTrail |
-| Data exfiltration | KMS encryption |
-| Public S3 exposure | AWS Config + Auto-remediation |
-| Suspicious API calls | GuardDuty |
-
----
-
-## 🧪 Attack Simulation (Test Scenario)
-
-To validate detection and response mechanisms:
-
-1. Intentionally misconfigured S3 bucket to public.
-2. AWS Config detected non-compliance.
-3. EventBridge triggered remediation Lambda.
-4. Bucket policy automatically reverted.
-5. SNS notification sent.
-
-This demonstrates automated, self-healing security behavior.
-
----
-
-## 📊 Security Controls Summary
-
-- Defense-in-depth architecture
-- Full logging & audit trail
-- Encryption at rest & in transit
-- Automated remediation workflow
-- Zero hardcoded secrets
-- Production-ready IAM policy structure
-
----
-
-## 🔄 Future Improvements
-
-- Full Terraform automation
-- Security Hub integration
-- VPC endpoints for private service access
-- Mutual TLS for API Gateway
-- CI/CD pipeline with security scanning
-
----
-
-## 📚 Technologies Used
-
-- AWS WAF
-- Amazon Cognito
-- API Gateway
-- AWS Lambda
-- DynamoDB
-- Amazon S3
-- AWS KMS
-- AWS Secrets Manager
-- AWS GuardDuty
-- AWS Config
-- Amazon EventBridge
-- Amazon SNS
+- **Never trust network traffic:** WAF strictly filters and monitors incoming requests.
+- **Never trust identity without verification:** Cognito and API Gateway ensure all API calls carry a valid, unexpired token.
+- **Enforce least privilege:** Every Lambda function and AWS resource operates under strict IAM policies.
+- **Encrypt data at rest and in transit:** TLS for all API and frontend traffic, with KMS managing at-rest encryption for S3 and DynamoDB.
+- **Continuously monitor for anomalies:** GuardDuty and CloudTrail actively log and analyze environment behavior.
+- **Automatically respond to threats:** EventBridge and Remediation Lambdas ensure self-healing capabilities.
 
 ---
 
 ## 🏁 Conclusion
 
-This project showcases a real-world secure serverless architecture using AWS services.  
-It demonstrates practical implementation of Zero-Trust principles combined with automated detection and response mechanisms.
-
-Designed and implemented as part of a cloud security engineering portfolio.
-
----
-
-## 👤 Author
-
-Emir  
-Cloud Security Enthusiast | AWS Solutions Architecture & Security Focus
+This project serves as a comprehensive reference architecture for building secure, scalable, and resilient modern web applications. By seamlessly integrating front-end delivery, back-end compute, identity management, and automated security monitoring, it demonstrates the practical implementation of Zero-Trust principles in a fully serverless AWS environment.
