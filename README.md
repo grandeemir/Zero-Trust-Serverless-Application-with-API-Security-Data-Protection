@@ -29,17 +29,6 @@ By adopting a **defense-in-depth strategy**, this architecture assumes that brea
 
 ---
 
-## 📑 Table of Contents
-- [Project Overview](#-project-overview)
-- [Security Architecture & Components](#️-security-architecture--components)
-- [Zero-Trust Design Principles Applied](#-zero-trust-design-principles-applied)
-- [Quick Start / Deployment](#-quick-start--deployment)
-- [Repository Structure](#-repository-structure)
-- [Contributing](#-contributing)
-- [License](#-license)
-
----
-
 ## 🛡️ Security Architecture & Components
 
 This project implements Zero-Trust principles using a robust stack of AWS services:
@@ -180,5 +169,6 @@ zero-trust-serverless-application/
 ---
 
 <div align="center">
-  <p>Built with 🔒 by Emir</p>
+  <p>💰 You can help me by Donating
+  [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/grandeemir) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/grandeemir) </p>
 </div>
