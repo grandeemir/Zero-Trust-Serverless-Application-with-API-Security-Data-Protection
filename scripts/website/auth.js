@@ -75,10 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
 
         if (!userPool) {
-            // Mock mode for local dev without configured Cognito
-            console.warn("Cognito not configured. Running in MOCK mode.");
-            sessionStorage.setItem('mockUser', username);
-            window.location.href = 'vault.html';
+            authError.textContent = "Error: Authentication system is not configured. Please check your config.js or ensure Terraform deployment completed successfully.";
             return;
         }
 
@@ -141,6 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             alert('Verification successful! You can now sign in.');
             verifyBox.classList.add('hidden');
+            authForm.parentElement.classList.remove('hidden');
+            isLoginMode = true;
+            updateUI();
+        });
+    });
+
+    function resetAuthBtn() {
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.textContent = isLoginMode ? 'Sign In' : 'Sign Up';
+    }
+});       verifyBox.classList.add('hidden');
             authForm.parentElement.classList.remove('hidden');
             isLoginMode = true;
             updateUI();

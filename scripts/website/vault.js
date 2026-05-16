@@ -128,8 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function getAuthToken() {
-        if (!authSession) return '';
-        return authSession.getIdToken().getJwtToken();
+        return sessionStorage.getItem('idToken') || '';
     }
 
     // API Interactions
@@ -286,6 +285,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const k = 1024;
         const dm = decimals < 0 ? 0 : decimals;
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    }
+});ytes', 'KB', 'MB', 'GB', 'TB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
     }

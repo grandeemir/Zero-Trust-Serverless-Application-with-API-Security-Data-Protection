@@ -46,5 +46,19 @@
     <footer>
         <p>&copy; 2026 Secure File Vault. All rights reserved.</p>
     </footer>
+
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (appConfig.cognito.domain.includes('${')) return; // Still running locally without terraform injection
+            
+            const redirectUri = `https://${window.location.hostname}/vault.html`;
+            const loginUrl = `https://${appConfig.cognito.domain}/login?client_id=${appConfig.cognito.userPoolClientId}&response_type=token&scope=email+openid&redirect_uri=${redirectUri}`;
+            const signupUrl = `https://${appConfig.cognito.domain}/signup?client_id=${appConfig.cognito.userPoolClientId}&response_type=token&scope=email+openid&redirect_uri=${redirectUri}`;
+            
+            document.querySelectorAll('a[href="auth.html"]').forEach(el => el.href = loginUrl);
+            document.querySelectorAll('a[href="auth.html?mode=signup"]').forEach(el => el.href = signupUrl);
+        });
+    </script>
 </body>
 </html>
